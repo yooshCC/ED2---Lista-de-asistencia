@@ -74,6 +74,54 @@ Tcurso* new_grupo()
     return cab;
 }
 
+void pasar_lista(Tcurso* curso)
+{
+    int d, m, n;
+    // Obtener la fecha actual para el registro
+    printf("INGRESA DIA: ");
+    scanf("%d", &d);
+    printf("INGRESA MES: ");
+    scanf("%d", &m);
+    printf("INGRESA ANO: ");
+    scanf("%d", &n);
+
+    Lista* temp_alumno = curso->curso;
+    int asistencia;
+    
+    printf("\n- - - - - Pasando lista del curso: %s - - - - -\n", curso->name_Curso);
+
+    while (temp_alumno != NULL)
+    {
+        printf("Asistencia de %s (1/ Si, 0/ No): ", temp_alumno->name_Alumno);
+        scanf("%d", &asistencia);
+        while (getchar() != '\n');
+
+        // Crear un nuevo nodo de historial para este dia
+        Historial* nuevo_historial = (Historial*)malloc(sizeof(Historial));
+        if (nuevo_historial == NULL)
+        {
+            printf("Error\n");
+            return;
+        }
+
+        nuevo_historial->dia = d;
+        nuevo_historial->mes = m;
+        nuevo_historial->ano = n;
+        nuevo_historial->asistencia_to_day = asistencia;
+        
+        nuevo_historial->sig = temp_alumno->historial_Academico;
+        temp_alumno->historial_Academico = nuevo_historial;
+
+        if (asistencia == 1) {
+            temp_alumno->total_Asistencia++;
+        }
+
+        temp_alumno = temp_alumno->sig;
+    }
+    printf("Lista completada.\n");
+}
+
+
 void menu(Tcurso** cab)
 {
     int opt = 0;
@@ -104,8 +152,7 @@ void menu(Tcurso** cab)
             case 2:
                 if (*cab != NULL)
                 {
-                    printf("Pasando lista del curso: %s\n", (*cab)->name_Curso);
-                    // FUNCION PASAR LISTA
+                    pasar_lista(*cab);
                 }else{
                     printf("No existe un curso.\n");
                 }
