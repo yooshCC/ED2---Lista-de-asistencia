@@ -129,8 +129,8 @@ void menu(Tcurso** cab)
     {
         printf("\n- - - - - Menu - - - - -\n");
         printf("1) Crear un curso nuevo\n");
-        printf("2) Pasar lista (No implementado)\n");
-        printf("3) Editar un grupo (No implementado)\n");
+        printf("2) Pasar lista\n");
+        printf("3) Mostrar lista\n");
         printf("4) Salir\n"); 
         printf("Seleccione una opcion: ");
         
@@ -142,25 +142,23 @@ void menu(Tcurso** cab)
         {
             case 1:
                 if (*cab != NULL)
-                {
                     printf("Ya existe un curso. Elimine el curso o seleccioanr otra opcion.\n");
-                }
-                else{
-                    *cab = new_grupo();
-                }
+                    else
+                        *cab = new_grupo();
+                
                 break;
             case 2:
                 if (*cab != NULL)
-                {
                     pasar_lista(*cab);
-                }else{
-                    printf("No existe un curso.\n");
-                }
+                    else
+                        printf("No existe un curso.\n");
                 break;
             case 3:
-                    //FUNCION PARA EDITAR UN CURSO
-                printf("Funcion de edicion aun no implementada.\n");
-                break;
+                if (*cab != NULL)
+                    Mostrarlista(*cab);
+                    else
+                        printf("No existe un curso.\n");
+            break;
             case 4:
                 printf("Saliendo. . .\n");
                 break;
@@ -168,6 +166,35 @@ void menu(Tcurso** cab)
                 printf("Opcion invalida. Por favor, intente de nuevo.\n");
                 break;
         }
+    }
+}
+
+void Mostrarlista(Tcurso* curso)
+{
+    if (curso == NULL)
+    {
+        printf("No hay curso para mostrar.\n");
+        return;
+    }
+
+    printf("\n- - - - - Curso: %s - - - - -\n", curso->name_Curso);
+    Lista* temp_alumno = curso->curso;
+
+    while (temp_alumno != NULL)
+    {
+        printf("Alumno: %s, Total Asistencias: %d\n", temp_alumno->name_Alumno, temp_alumno->total_Asistencia);
+        
+        Historial* temp_historial = temp_alumno->historial_Academico;
+        while (temp_historial != NULL)
+        {
+            printf("  Fecha: %02d/%02d/%04d, Asistencia: %s\n", 
+                   temp_historial->dia, 
+                   temp_historial->mes, 
+                   temp_historial->ano, 
+                   temp_historial->asistencia_to_day ? "Presente" : "Ausente");
+            temp_historial = temp_historial->sig;
+        }
+        temp_alumno = temp_alumno->sig;
     }
 }
 
@@ -182,6 +209,6 @@ int main()
         free(grupo);
         printf("Memoria liberada.\n");
     }
-
+    printf("Programa finalizado :)\n");
     return 0;
 }
